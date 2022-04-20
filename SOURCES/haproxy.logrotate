@@ -1,8 +1,8 @@
 /var/log/haproxy/*.log {
-    rotate 14
+    rotate 60
     daily
     missingok
-    compress
+#    compress
     dateext
     notifempty
     copytruncate
