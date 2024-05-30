@@ -1,7 +1,7 @@
 [Unit]
 Description=HAProxy Load Balancer
 Documentation=man:haproxy(1)
-After=syslog.target network.target
+After=syslog.target network.target remote-fs.target
 
 [Service]
 EnvironmentFile=-/etc/sysconfig/haproxy

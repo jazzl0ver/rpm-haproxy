@@ -1,5 +1,5 @@
 HOME=$(shell pwd)
-MAINVERSION?=2.4
+MAINVERSION?=3.0
 NO_SUDO?=0
 USE_PODMAN?=0
 LUA_VERSION?=5.4.3
@@ -66,20 +66,20 @@ ifeq ($(USE_LUA),1)
 endif
 
 build-docker:
-	$(CONTAINER_RUNTIME) build -t haproxy-rpm-builder7:${VERSION}-${RELEASE} -f Dockerfile7 .
-	$(CONTAINER_RUNTIME) build -t haproxy-rpm-builder8:${VERSION}-${RELEASE} -f Dockerfile8 .
-	$(CONTAINER_RUNTIME) build -t haproxy-rpm-builder9:${VERSION}-${RELEASE} -f Dockerfile9 .
+#	$(CONTAINER_RUNTIME) build -t haproxy-rpm-builder7:${VERSION}-${RELEASE} -f Dockerfile7 .
+#	$(CONTAINER_RUNTIME) build -t haproxy-rpm-builder8:${VERSION}-${RELEASE} -f Dockerfile8 .
+#	$(CONTAINER_RUNTIME) build -t haproxy-rpm-builder9:${VERSION}-${RELEASE} -f Dockerfile9 .
 	$(CONTAINER_RUNTIME) build -t haproxy-rpm-builder-amzn2:${VERSION}-${RELEASE} -f Dockerfile-amzn2 .
-	$(CONTAINER_RUNTIME) build -t haproxy-rpm-builder-amzn2023:${VERSION}-${RELEASE} -f Dockerfile-amzn2023 .
+#	$(CONTAINER_RUNTIME) build -t haproxy-rpm-builder-amzn2023:${VERSION}-${RELEASE} -f Dockerfile-amzn2023 .
 
 run-docker: build-docker
 	mkdir -p RPMS
 	chcon -Rt svirt_sandbox_file_t RPMS || true
-	$(CONTAINER_RUNTIME) run --volume $(HOME)/RPMS:/RPMS --rm -e USE_PROMETHEUS=${USE_PROMETHEUS} -e RELEASE=${RELEASE} haproxy-rpm-builder7:${VERSION}-${RELEASE}
-	$(CONTAINER_RUNTIME) run --volume $(HOME)/RPMS:/RPMS --rm -e USE_PROMETHEUS=${USE_PROMETHEUS} -e RELEASE=${RELEASE} haproxy-rpm-builder8:${VERSION}-${RELEASE}
-	$(CONTAINER_RUNTIME) run --volume $(HOME)/RPMS:/RPMS --rm -e USE_PROMETHEUS=${USE_PROMETHEUS} -e RELEASE=${RELEASE} haproxy-rpm-builder9:${VERSION}-${RELEASE}
+#	$(CONTAINER_RUNTIME) run --volume $(HOME)/RPMS:/RPMS --rm -e USE_PROMETHEUS=${USE_PROMETHEUS} -e RELEASE=${RELEASE} haproxy-rpm-builder7:${VERSION}-${RELEASE}
+#	$(CONTAINER_RUNTIME) run --volume $(HOME)/RPMS:/RPMS --rm -e USE_PROMETHEUS=${USE_PROMETHEUS} -e RELEASE=${RELEASE} haproxy-rpm-builder8:${VERSION}-${RELEASE}
+#	$(CONTAINER_RUNTIME) run --volume $(HOME)/RPMS:/RPMS --rm -e USE_PROMETHEUS=${USE_PROMETHEUS} -e RELEASE=${RELEASE} haproxy-rpm-builder9:${VERSION}-${RELEASE}
 	$(CONTAINER_RUNTIME) run --volume $(HOME)/RPMS:/RPMS --rm -e USE_PROMETHEUS=${USE_PROMETHEUS} -e RELEASE=${RELEASE} haproxy-rpm-builder-amzn2:${VERSION}-${RELEASE}
-	$(CONTAINER_RUNTIME) run --volume $(HOME)/RPMS:/RPMS --rm -e USE_PROMETHEUS=${USE_PROMETHEUS} -e RELEASE=${RELEASE} haproxy-rpm-builder-amzn2023:${VERSION}-${RELEASE}
+#	$(CONTAINER_RUNTIME) run --volume $(HOME)/RPMS:/RPMS --rm -e USE_PROMETHEUS=${USE_PROMETHEUS} -e RELEASE=${RELEASE} haproxy-rpm-builder-amzn2023:${VERSION}-${RELEASE}
 
 build: $(build_stages)
 	cp -r ./SPECS/* ./rpmbuild/SPECS/ || true
